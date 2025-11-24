@@ -77,7 +77,7 @@ header {
   align-items: center;
   justify-content: center;
   text-align: center;
-  background-image: url('../../image-assets/home.png');
+  background-image: url('./image-assets/home.png');
   background-size: cover;
   background-position: center;
   height: 100vh;
@@ -373,4 +373,3 @@ header {
     font-size: 13px;
     color: #ccc;
   }
-
