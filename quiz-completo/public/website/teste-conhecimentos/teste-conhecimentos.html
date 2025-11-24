@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Testes de Conhecimentos</title>
+    <style>
+
+        /* Impede que header passe do tamanho da página */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* A página começa invisível até a sessão ser validada */
+        body {
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity .15s ease-in-out;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f0f2f5;
+            color: #333;
+        }
+
+        body.loaded {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        /* HEADER */
+        header {
+            width: 100%;
+            background: #1e40af;
+            color: white;
+            padding: 14px 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+        }
+
+        header h2 {
+            margin: 0;
+            font-weight: 600;
+        }
+
+        .btn-logout {
+            background: #b91c1c;
+            border: none;
+            padding: 8px 14px;
+            color: white;
+            font-size: 14px;
+            font-weight: bold;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .btn-logout:hover {
+            background: #7f1d1d;
+        }
+
+        h1 {
+            text-align: center;
+            margin-top: 30px;
+            font-size: 32px;
+            font-weight: 700;
+            color: #222;
+        }
+
+        .quiz-container {
+            max-width: 900px;
+            margin: 30px auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 20px;
+        }
+
+        .quiz-card {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.08);
+            cursor: pointer;
+            transition: 0.25s;
+            border-left: 6px solid #4A90E2;
+        }
+
+        .quiz-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 6px 14px rgba(0,0,0,0.12);
+        }
+
+        .quiz-title {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .quiz-desc {
+            font-size: 14px;
+            color: #555;
+        }
+
+        .icon {
+            font-size: 22px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- HEADER -->
+    <header>
+        <h2>Testes de Conhecimentos</h2>
+
+        <button class="btn-logout" id="logoutBtn">Sair</button>
+    </header>
+
+
+    <h1>Selecione um Quiz</h1>
+
+    <div id="quizList" class="quiz-container">Carregando quizzes...</div>
+
+    <script>
+
+    // =========================================
+    // 1) Checar sessão (GET /usuario/sessao)
+    // =========================================
+    async function checarSessao() {
+        try {
+            const res = await fetch("/usuario/sessao");
+            
+            if (res.status === 401) {
+                // Redireciona ANTES de mostrar qualquer coisa
+                window.location.href = "/website/login/login.html";
+                return;
+            }
+
+            // Sessão válida → revela a página
+            document.body.classList.add("loaded");
+
+        } catch (err) {
+            console.error("Erro na checagem de sessão:", err);
+            window.location.href = "/website/login/login.html";
+        }
+    }
+
+    // Executa imediatamente
+    checarSessao();
+
+
+
+    // =========================================
+    // 2) Logout (DELETE /usuario)
+    // =========================================
+    document.getElementById("logoutBtn").onclick = async () => {
+        try {
+            await fetch("/usuario", { method: "DELETE" });
+            window.location.href = "/index.html";
+        } catch (err) {
+            window.location.href = "/index.html";
+        }
+    };
+
+
+    // =========================================
+    // 3) Carregar lista de quizzes
+    // =========================================
+    fetch('/quiz')
+        .then(res => res.json())
+        .then(quizzes => {
+            const container = document.getElementById('quizList');
+            container.innerHTML = '';
+
+            if (!Array.isArray(quizzes) || quizzes.length === 0) {
+                container.innerHTML = "<p>Nenhum quiz encontrado.</p>";
+                return;
+            }
+
+            quizzes.forEach(q => {
+                const card = document.createElement('div');
+                card.className = 'quiz-card';
+
+                card.innerHTML = `
+                    <div class="quiz-title">
+                        <span class="icon">📘</span> 
+                        ${q.nome}
+                    </div>
+                    <div class="quiz-desc">${q.descricao}</div>
+                `;
+
+                card.onclick = async () => {
+                    try {
+                        const res = await fetch(`/quiz/selecionar/${q.id_quiz}`);
+
+                        if (!res.ok) {
+                            const erro = await res.json();
+                            alert("Erro: " + erro.msg);
+                            return;
+                        }
+
+                        await res.json();
+
+                        window.location.href = `/website/teste-conhecimentos/quiz-perguntas.html`;
+
+                    } catch (e) {
+                        console.error(e);
+                        alert("Erro ao selecionar quiz.");
+                    }
+                };
+
+                container.appendChild(card);
+            });
+        })
+        .catch(err => {
+            console.error(err);
+            document.getElementById('quizList').innerHTML =
+                "<p>Erro ao carregar quizzes.</p>";
+        });
+    </script>
+
+</body>
+</html>

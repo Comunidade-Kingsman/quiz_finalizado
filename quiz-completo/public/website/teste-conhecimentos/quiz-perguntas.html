@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quiz | Perguntas</title>
+  <link rel="stylesheet" href="quiz.css">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      width: 100%;
+      overflow-x: hidden; /* evita scroll horizontal */
+      font-family: "Open Sans", sans-serif;
+      background: #f4f4f4;
+      transition: opacity .15s ease-in-out;
+    }
+
+    body {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    body.loaded {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    /* HEADER FIXO */
+    header {
+      width: 100vw; /* garante 100% da viewport */
+      background: #1e40af;
+      color: white;
+      padding: 14px 25px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+      position: sticky; /* fica no topo ao rolar */
+      top: 0;
+      left: 0;
+      z-index: 1000;
+      box-sizing: border-box; /* inclui padding na largura */
+    }
+
+
+    /* BOTÃO DE LOGOUT */
+    .btn-logout {
+      background: #b91c1c;
+      border: none;
+      padding: 8px 14px;
+      color: white;
+      font-size: 14px;
+      font-weight: bold;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .btn-logout:hover {
+      background: #7f1d1d;
+    }
+
+    /* CONTAINER DO QUIZ */
+    .container {
+      max-width: 700px;
+      margin: 40px auto;
+      background: white;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.1);
+    }
+
+
+    h2 {
+      margin-bottom: 20px;
+      font-size: 26px;
+      font-weight: 600;
+    }
+
+    .alternativa {
+      padding: 12px 16px;
+      background: #eeeeee;
+      border-radius: 8px;
+      margin-bottom: 12px;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .alternativa:hover {
+      background: #dcdcdc;
+    }
+
+    .alternativa.selected {
+      background: #c3e7ff;
+      border-left: 5px solid #2196f3;
+    }
+
+    #btnProxima {
+      margin-top: 20px;
+      padding: 14px;
+      background: #1d3557;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      width: 100%;
+      cursor: pointer;
+      font-size: 17px;
+      transition: 0.2s;
+    }
+
+    #btnProxima:hover {
+      background: #457b9d;
+    }
+
+    #mensagem {
+      text-align: center;
+      margin-top: 15px;
+      font-weight: 600;
+    }
+
+    #btnResultados {
+      margin-top: 25px;
+      padding: 14px;
+      background: #06a77d;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      width: 100%;
+      cursor: pointer;
+      font-size: 17px;
+      display: none; /* aparece só no final */
+      transition: .2s;
+    }
+
+    #btnResultados:hover {
+      background: #08c993;
+    }
+  </style>
+</head>
+
+<body>
+
+<!-- HEADER -->
+<header>
+  <h2>Quiz</h2>
+  <button id="logoutBtn" class="btn-logout">Sair</button>
+</header>
+
+<div class="container">
+  <h2 id="textoPergunta">Carregando pergunta...</h2>
+
+  <div id="listaAlternativas"></div>
+
+  <button id="btnProxima" onclick="proximaPergunta()">Próxima pergunta</button>
+  <button id="btnResultados" onclick="verResultados()">Ver resultados</button>
+
+  <p id="mensagem"></p>
+</div>
+
+<script>
+  let alternativaSelecionada = null;
+
+  // ============================
+  // 1) VALIDAR SESSÃO
+  // ============================
+  async function validarSessao() {
+    try {
+      const res = await fetch("/usuario/sessao");
+      if (res.status === 401) {
+        window.location.href = "/website/login/login.html";
+        return;
+      }
+      document.body.classList.add("loaded"); // mostra a página
+      carregarPergunta();
+    } catch (err) {
+      console.error("Erro ao validar sessão:", err);
+      window.location.href = "/website/login/login.html";
+    }
+  }
+
+  validarSessao();
+
+  // ============================
+  // 2) BOTÃO DE LOGOUT
+  // ============================
+  document.getElementById("logoutBtn").onclick = async () => {
+    try { await fetch("/usuario", { method: "DELETE" }); } catch(e) {}
+    window.location.href = "/index.html";
+  };
+
+  // ============================
+  // 3) FUNÇÕES DO QUIZ
+  // ============================
+  function selecionarAlternativa(div) {
+    document.querySelectorAll(".alternativa").forEach(a => a.classList.remove("selected"));
+    div.classList.add("selected");
+    alternativaSelecionada = div.dataset.id;
+  }
+
+  async function proximaPergunta() {
+    if (!alternativaSelecionada) {
+      const msg = document.getElementById("mensagem");
+      msg.innerText = "Selecione uma alternativa!";
+      msg.style.color = "red";
+      return;
+    }
+
+    document.getElementById("mensagem").innerText = "";
+
+    try {
+      await fetch("/resposta", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ idResposta: alternativaSelecionada })
+      });
+
+      carregarPergunta();
+    } catch (err) {
+      console.error(err);
+      alert("Erro ao enviar resposta.");
+    }
+  }
+
+  function verResultados() {
+    window.location.href = "/website/teste-conhecimentos/quiz-resultados.html";
+  }
+
+  function carregarPergunta() {
+    fetch("/pergunta")
+      .then(res => res.json())
+      .then(data => {
+        if (!data || !data.id_pergunta) {
+          document.getElementById("textoPergunta").innerText = "Quiz finalizado!";
+          document.getElementById("listaAlternativas").innerHTML = "";
+          document.getElementById("btnProxima").style.display = "none";
+          document.getElementById("btnResultados").style.display = "block";
+          return;
+        }
+
+        document.getElementById("textoPergunta").innerText = data.pergunta;
+
+        const lista = document.getElementById("listaAlternativas");
+        lista.innerHTML = "";
+        alternativaSelecionada = null;
+
+        data.alternativas.forEach(alt => {
+          const div = document.createElement("div");
+          div.classList.add("alternativa");
+          div.innerText = alt.alternativa;
+          div.dataset.id = alt.id_alternativa;
+          div.onclick = () => selecionarAlternativa(div);
+          lista.appendChild(div);
+        });
+      })
+      .catch(err => {
+        console.error(err);
+        document.getElementById("textoPergunta").innerText = "Erro ao carregar pergunta.";
+      });
+  }
+</script>
+
+</body>
+</html>
+  

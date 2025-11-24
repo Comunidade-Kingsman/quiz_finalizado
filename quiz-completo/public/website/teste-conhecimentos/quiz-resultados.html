@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resultados do Quiz</title>
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Chart.js DataLabels Plugin -->
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
+
+    <style>
+        /* Evita que o conteúdo apareça antes da validação */
+        body {
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity .15s ease-in-out;
+
+            font-family: Arial, sans-serif;
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 20px;
+            background: #e5e7eb;
+        }
+
+        body.loaded {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        /* HEADER */
+        header {
+            width: 100%;
+            background: #1e40af;
+            color: white;
+            padding: 14px 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+            border-radius: 8px;
+        }
+
+        header h2 {
+            margin: 0;
+            font-weight: 600;
+        }
+
+        .btn-logout {
+            background: #b91c1c;
+            border: none;
+            padding: 8px 14px;
+            color: white;
+            font-size: 14px;
+            font-weight: bold;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .btn-logout:hover {
+            background: #7f1d1d;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 10px;
+            margin-top: 25px;
+        }
+
+        #finalizado {
+            text-align: center;
+            font-size: 28px;
+            margin-bottom: 25px;
+            font-weight: bold;
+            color: #1f2937;
+        }
+
+        .chart-container {
+            background: #ffffff;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.20);
+            margin-bottom: 35px;
+        }
+
+        #mensagem {
+            font-size: 22px;
+            font-weight: bold;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            margin-top: 25px;
+        }
+
+        .excelente {
+            background-color: #c8e6c9;
+            color: #1b5e20;
+        }
+
+        .mediano {
+            background-color: #fff8e1;
+            color: #795548;
+        }
+
+        .fraco {
+            background-color: #ffebee;
+            color: #b71c1c;
+        }
+
+        .btn-voltar {
+            display: block;
+            margin: 30px auto;
+            text-decoration: none;
+            text-align: center;
+            padding: 14px 25px;
+            background: #374151;
+            color: white;
+            font-size: 18px;
+            border-radius: 10px;
+            font-weight: bold;
+            transition: 0.2s ease-in-out;
+            width: 260px;
+        }
+
+        .btn-voltar:hover {
+            background: #111827;
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- HEADER -->
+<header>
+    <h2>Resultados do Quiz</h2>
+    <button id="logoutBtn" class="btn-logout">Sair</button>
+</header>
+
+<h1>Resultados</h1>
+
+<div id="finalizado">Quiz finalizado!</div>
+
+<div class="chart-container">
+    <h3 style="text-align:center;">Acertos e Erros</h3>
+    <canvas id="barra"></canvas>
+</div>
+
+<div class="chart-container">
+    <h3 style="text-align:center;">Percentuais</h3>
+    <canvas id="pizza"></canvas>
+
+    <div id="mensagem"></div>
+</div>
+
+<a href="/website/teste-conhecimentos/teste-conhecimentos.html" class="btn-voltar">
+    Voltar para a lista de quizzes
+</a>
+
+<script>
+
+    // ============================
+    // 1) VALIDAR SESSÃO
+    // ============================
+    async function validarSessao() {
+        try {
+            const res = await fetch("/usuario/sessao");
+
+            if (res.status === 401) {
+                window.location.href = "/website/login/login.html";
+                return;
+            }
+
+            document.body.classList.add("loaded");
+
+        } catch (err) {
+            console.error("Erro ao validar sessão:", err);
+            window.location.href = "/website/login/login.html";
+        }
+    }
+
+    validarSessao();
+
+
+    // ============================
+    // 2) BOTÃO DE LOGOUT
+    // ============================
+    document.getElementById("logoutBtn").onclick = async () => {
+        try {
+            await fetch("/usuario", { method: "DELETE" });
+        } catch (e) {}
+
+        window.location.href = "/index.html";
+    };
+
+
+    // ============================
+    // 3) CARREGAR RESULTADOS
+    // ============================
+    document.addEventListener("DOMContentLoaded", async () => {
+        try {
+            const response = await fetch("/resposta/resultado");
+            const data = await response.json();
+
+            const {
+                totalAcertos,
+                totalErros,
+                percentualAcertos,
+                percentualErros,
+                mensagemDesempenho
+            } = data;
+
+            const msg = document.getElementById("mensagem");
+            msg.textContent = mensagemDesempenho;
+
+            if (percentualAcertos >= 80) {
+                msg.classList.add("excelente");
+            } else if (percentualAcertos >= 50) {
+                msg.classList.add("mediano");
+            } else {
+                msg.classList.add("fraco");
+            }
+
+            // cores
+            const corAcertos = "#1e40af";
+            const corErros = "#b91c1c";
+
+            // barras
+            new Chart(document.getElementById("barra"), {
+                type: "bar",
+                data: {
+                    labels: ["Acertos", "Erros"],
+                    datasets: [{
+                        label: "Quantidade",
+                        data: [totalAcertos, totalErros],
+                        backgroundColor: [corAcertos, corErros]
+                    }]
+                },
+                plugins: [ChartDataLabels],
+                options: {
+                    responsive: true,
+                    plugins: {
+                        datalabels: {
+                            color: "#fff",
+                            anchor: "end",
+                            align: "top",
+                            font: { weight: "bold", size: 15 },
+                            formatter: (value, ctx) =>
+                                ctx.chart.data.labels[ctx.dataIndex] === "Acertos"
+                                    ? `${totalAcertos} acertos`
+                                    : `${totalErros} erros`
+                        }
+                    },
+                    scales: {
+                        y: { beginAtZero: true, ticks: { color: "#111" } },
+                        x: { ticks: { color: "#111" } }
+                    }
+                }
+            });
+
+            // pizza
+            new Chart(document.getElementById("pizza"), {
+                type: "pie",
+                data: {
+                    labels: ["% Acertos", "% Erros"],
+                    datasets: [{
+                        data: [percentualAcertos, percentualErros],
+                        backgroundColor: [corAcertos, corErros]
+                    }]
+                },
+                plugins: [ChartDataLabels],
+                options: {
+                    responsive: true,
+                    plugins: {
+                        datalabels: {
+                            color: "white",
+                            font: { weight: "bold", size: 16 },
+                            formatter: v => v + "%"
+                        }
+                    }
+                }
+            });
+
+        } catch (error) {
+            console.error("Erro ao carregar resultados:", error);
+        }
+    });
+
+</script>
+
+</body>
+</html>

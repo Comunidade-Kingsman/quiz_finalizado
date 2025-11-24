@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Comunidade Kingsman | Login</title>
+  <link rel="stylesheet" href="login.css">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Open+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+</head>
+
+<body>
+  <header>
+    <div class="logo-header">
+      <a href="../home/index.html">
+        <img src="../../image-assets/LogoKingsman.png" alt="Logo Kingsman" class="logo-img">
+      </a>
+    </div>
+
+    <ul class="navbar">
+      <li><a href="../home/index.html">Home</a></li>
+      <li><a href="#" class="selected">Login</a></li>
+      <li><a href="../cadastro/cadastro.html">Cadastro</a></li>
+    </ul>
+  </header>
+
+  <section class="login-section">
+    <div class="login-card">
+      <h1>Bem-vindo de volta, Cavalheiro.</h1>
+      <p class="subtexto">A elegância deve se tornar um hábito. Conecte-se para continuar sua jornada.</p>
+
+      <form>
+  <input id="ipt_email" class="field" type="email" placeholder="E-mail">
+  <input id="ipt_senha" class="field" type="password" placeholder="Senha">
+
+  <p id="responseLogin" class="mensagem"></p>
+
+  <button type="button" class="btn-login" onclick="validate_login()">Entrar</button>
+</form>
+
+    </div>
+  </section>
+
+  <script>
+var isValid = false;
+
+function validate_login(){
+    var email = ipt_email.value.trim();
+    var senha = ipt_senha.value;
+
+    // ======= VALIDAÇÕES =======
+      if (email.length === 0){
+          responseLogin.innerHTML = "Digite seu e-mail";
+          responseLogin.style.color = "red";
+          isValid = false;
+          return;
+      }
+      else if (!email.includes("@") || !email.includes(".com")){
+          responseLogin.innerHTML = "E-mail inválido";
+          responseLogin.style.color = "red";
+          isValid = false;
+          return;
+      }
+
+      if (senha.length === 0){
+          responseLogin.innerHTML = "Digite sua senha";
+          responseLogin.style.color = "red";
+          isValid = false;
+          return;
+      }
+      else if (senha.length < 6){
+          responseLogin.innerHTML = "A senha deve ter pelo menos 6 caracteres";
+          responseLogin.style.color = "red";
+          isValid = false;
+          return;
+      }
+
+      isValid = true;
+
+      // CHAMA A FUNÇÃO DE LOGIN
+      autenticar();
+  }
+
+
+  function autenticar() {
+      if (!isValid) return;
+
+      var email = ipt_email.value.trim();
+      var senha = ipt_senha.value;
+
+      fetch("/usuario", {
+          method: "PUT",
+          headers: {
+              "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+              email: email,
+              senha: senha
+          })
+      })
+      .then(async function(response) {
+          var resposta = await response.json().catch(() => null);
+
+          if (!response.ok) {
+              responseLogin.style.color = "red";
+              responseLogin.innerHTML = resposta?.msg || "Erro ao fazer login";
+              return;
+          }
+
+          // SUCESSO!
+          responseLogin.style.color = "lightgreen";
+          responseLogin.innerHTML = resposta.msg;
+
+          // REDIRECIONA APÓS 1.5s
+          setTimeout(() => {
+              window.location.href = "/website/teste-conhecimentos/teste-conhecimentos.html";
+          }, 1500);
+      })
+      .catch(function (erro) {
+          console.error("Erro no fetch:", erro);
+          responseLogin.style.color = "red";
+          responseLogin.innerHTML = "Erro ao conectar com o servidor.";
+      });
+  }
+</script>
+
+
+
+</body>
+</html>
+
+

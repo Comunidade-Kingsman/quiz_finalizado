@@ -1,0 +1,112 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Open+Sans:wght@300;400;500&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: #0c0c0c;
+  color: #f5f5f5;
+  font-family: 'Open Sans', sans-serif;
+}
+
+header {
+  background-color: #1a1a1a;
+  border-bottom: 1px solid #c6a664;
+  padding: 20px 60px;
+  display: flex;
+  align-items: center;
+  height: 100px;
+  justify-content: space-between;
+}
+
+.logo-header img {
+  width: 120px;
+  height: auto;
+}
+
+.navbar {
+  list-style: none;
+  display: flex;
+  gap: 25px;
+}
+
+.navbar a {
+  text-decoration: none;
+  color: #f5f5f5;
+  transition: color 0.3s;
+  font-size: 0.95rem;
+}
+
+.navbar a:hover,
+.navbar .selected {
+  color: #c6a664;
+}
+
+.login-section {
+  display: flex;
+  background-image: url("../../image-assets/login.png");
+  background-position: center;
+  background-size: cover;
+  justify-content: center;
+  align-items: center;
+  height: calc(100vh - 100px);
+}
+
+.login-card {
+  background-color: #1a1a1a;
+  border: 1px solid #c6a664;
+  border-radius: 12px;
+  padding: 40px 50px;
+  width: 340px;
+  text-align: center;
+  box-shadow: 0 0 25px rgba(198, 166, 100, 0.15);
+}
+
+.login-card h1 {
+  font-family: 'Cinzel', serif;
+  color: #c6a664;
+  font-size: 1.6rem;
+  margin-bottom: 10px;
+}
+
+.subtexto {
+  color: #bdbdbd;
+  font-size: 0.9rem;
+  margin-bottom: 30px;
+}
+
+.field {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  background-color: #0c0c0c;
+  border: 1px solid #c6a664;
+  border-radius: 6px;
+  color: #f5f5f5;
+  font-size: 0.95rem;
+}
+
+.field::placeholder {
+  color: #bdbdbd;
+}
+
+.btn-login {
+  background-color: #c6a664;
+  color: #0c0c0c;
+  border: none;
+  padding: 10px 0;
+  border-radius: 6px;
+  font-family: 'Cinzel', serif;
+  font-size: 1rem;
+  cursor: pointer;
+  width: 100%;
+  transition: all 0.3s ease;
+}
+
+.btn-login:hover {
+  background-color: #e3c979;
+  transform: scale(1.03);
+}

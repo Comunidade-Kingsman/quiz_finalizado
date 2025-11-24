@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kingsman | Cadastro</title>
+  <link rel="stylesheet" href="cadastro.css">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Open+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+</head>
+
+<body>
+  <div class="cadastro-container">
+    <div class="cadastro-introducao">
+      <div class="conteudo-introducao">
+        <h2>Bem-vindo à Comunidade Kingsman</h2>
+        <p>Descubra o poder da elegância atemporal e transforme a forma como o mundo enxerga você.</p>
+
+        <div class="etapas-cadastro">
+          <div class="etapa ativa">
+            <span class="numero">1</span> Cadastro
+          </div>
+          
+          <a href="../login/login.html" class="etapa link-etapa">
+            <span class="numero">2</span> Login
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div class="cadastro-formulario">
+      <img src="../../image-assets/LogoKingsman.png" alt="Logo Kingsman" class="logo">
+      <h3>Crie sua conta</h3>
+      <p class="descricao">Preencha seus dados para acessar o sistema</p>
+
+      <form class="formulario">
+        <label>Nome do usuário</label>
+        <input id="ipt_nome" type="text" placeholder="Ex: David Beckham">
+
+        <label>E-mail</label>
+        <input id="ipt_email" type="email" placeholder="Ex: davidbeckham@gmail.com">
+
+        <label>Senha</label>
+        <input id="ipt_senha" type="password" placeholder="Insira sua senha">
+
+        <label>Confirmar senha</label>
+        <input id="ipt_confirmar" type="password" placeholder="Redigite sua senha">
+
+          <p id="responseValidator" class="mensagem"></p>
+
+
+        <button onclick="validate_cadastrar()" type="button">Cadastrar</button>
+      </form>
+    </div>
+  </div>
+
+<script>
+  var isValid = false;
+
+  function validate_cadastrar(){
+      var nome = ipt_nome.value.trim();
+      var email = ipt_email.value.trim();
+      var senha = ipt_senha.value;
+      var confirmar = ipt_confirmar.value;
+
+      // VALIDAÇÕES
+      if (nome.length < 3){
+          responseValidator.innerHTML = "Insira um nome válido (mínimo 3 caracteres)";
+          responseValidator.style.color = "red";
+          isValid = false;
+          return;
+      }
+
+      if (email.includes(" ")) {
+          responseValidator.innerHTML = "Não é permitido email com espaços";
+          responseValidator.style.color = "red";
+          isValid = false;
+          return;
+      }
+
+      if (!email.includes("@") || !email.includes(".com")){
+          responseValidator.innerHTML = "Insira um endereço de email válido";
+          responseValidator.style.color = "red";
+          isValid = false;
+          return;
+      }
+
+      if (senha.length < 6){
+          responseValidator.innerHTML = "A senha deve ter pelo menos 6 caracteres";
+          responseValidator.style.color = "red";
+          isValid = false;
+          return;
+      }
+
+      if (senha !== confirmar){
+          responseValidator.innerHTML = "As senhas precisam ser iguais";
+          responseValidator.style.color = "red";
+          isValid = false;
+          return;
+      }
+
+      // SE CHEGOU AQUI, É VÁLIDO
+      isValid = true;
+      cadastrar(); // chama a função que envia ao servidor
+  }
+
+
+  // ENVIA PARA A ROTA /usuario
+  function cadastrar() {
+      if (!isValid) return;
+
+      var nome = ipt_nome.value.trim();
+      var email = ipt_email.value.trim();
+      var senha = ipt_senha.value;
+
+      fetch("/usuario", {
+          method: "POST",
+          headers: {
+              "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+              nome: nome,
+              email: email,
+              senha: senha
+          })
+      })
+      .then(async function(response) {
+          var resposta = await response.json().catch(() => null);
+
+          if (!response.ok) {
+              // ERROS PERSONALIZADOS DO SERVIDOR
+              responseValidator.style.color = "red";
+              responseValidator.innerHTML = resposta?.msg || "Erro ao cadastrar";
+              return;
+          }
+
+          // SUCESSO
+          responseValidator.style.color = "lightgreen";
+          responseValidator.innerHTML = resposta.msg;
+      })
+      .catch(function (erro) {
+          console.error("Erro no fetch:", erro);
+          responseValidator.style.color = "red";
+          responseValidator.innerHTML = "Erro ao conectar com o servidor.";
+      });
+  }
+</script>
+
+</body>
+</html>
+
+
+

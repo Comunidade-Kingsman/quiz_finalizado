@@ -1,0 +1,376 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Open+Sans:wght@300;400;500&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: #0c0c0c;
+  color: #f5f5f5;
+  font-family: 'Open Sans', sans-serif;
+}
+
+/* HEADER */
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #1a1a1a;
+  padding: 20px 60px;
+  height: 100px;
+  border-bottom: 1px solid #c6a664;
+}
+
+.logo-header img {
+  width: 120px;
+  height: auto;
+}
+
+.navbar ul {
+  list-style: none;
+  display: flex;
+  gap: 25px;
+}
+
+.navbar a {
+  text-decoration: none;
+  color: #f5f5f5;
+  font-weight: 500;
+  transition: color 0.3s;
+}
+
+.navbar a:hover,
+.navbar .selected {
+  color: #c6a664;
+}
+
+/* BOTÕES HEADER */
+.header-buttons {
+  display: flex;
+  gap: 15px;
+}
+
+.btn-header {
+  display: inline-block;
+  background-color: transparent;
+  border: 1px solid #c6a664;
+  color: #c6a664;
+  padding: 8px 20px;
+  border-radius: 4px;
+  font-family: 'Cinzel', serif;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-header:hover {
+  background-color: #c6a664;
+  color: #0c0c0c;
+}
+
+/* HOME CONTAINER */
+
+.home-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  background-image: url('../../image-assets/home.png');
+  background-size: cover;
+  background-position: center;
+  height: 100vh;
+  padding-top: 150px;
+}
+
+.title-section-home-container {
+  text-shadow: 2px 2px 8px #000;
+}
+
+.home-text {
+  font-family: 'Cinzel', serif;
+  font-size: 2rem;
+  margin-bottom: 20px;
+}
+
+.destaque {
+  color: #c6a664;
+}
+
+.desc-section-home-container p {
+  color: #bdbdbd;
+  font-size: 1rem;
+  max-width: 600px;
+  margin: 0 auto 30px;
+}
+
+.btn-info {
+  display: inline-block;
+  background-color: #c6a664;
+  color: #0c0c0c;
+  border: none;
+  padding: 12px 30px;
+  border-radius: 4px;
+  font-family: 'Cinzel', serif;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.3s ease ;
+}
+
+.btn-info:hover {
+  background-color: #dfc884;
+  transform: scale(1.1);
+}
+
+/* ARTIGOS */
+.artigos-section {
+  background-color: #1a1a1a;
+  text-align: center;
+  padding: 80px 20px;
+}
+
+.artigos-section h2 {
+  font-family: 'Cinzel', serif;
+  color: #c6a664;
+  margin-bottom: 10px;
+  font-size: 30px;
+  font: 500;
+}
+
+.sub-artigo {
+  color: #bdbdbd;
+  margin-bottom: 40px;
+  font: 8px;
+}
+
+.artigos-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 25px;
+}
+
+.artigos-card {
+  background-color: #0c0c0c;
+  border: 1px solid #c6a664;
+  border-radius: 8px;
+  width: 370px;
+  height: 280px;
+  padding: 15px;
+  text-align: center;
+  transition: transform 0.3s ease;
+  overflow: hidden;
+}
+
+.artigos-card:hover {
+  transform: scale(1.04);
+}
+
+.artigos-card img {
+  width: 70%;          
+  height: 100px;    
+  object-fit: cover;           
+  border-radius: 6px;   
+}
+
+
+.artigos-card h3 {
+  text-align: center;
+  font-family: 'Cinzel', serif;
+  color: #c6a664;
+  font-size: 19px;
+  margin: 10px 0;
+}
+
+.artigos-card p {
+  color: #bdbdbd;
+  font-size: 14px;
+  margin-bottom: 15px;
+}
+
+.artigos-card a {
+  color: #c6a664;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.artigos-card a:hover {
+  text-decoration: underline;
+}
+
+
+/* VISÃO PESSOAL */
+.visão-pessoal {
+  display: flex;
+  align-items: center;
+  gap: 80px;
+  padding: 80px 20px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.texto-visao {
+  flex: 4;
+  text-align: left;
+
+}
+
+.visão-pessoal img {
+  flex: 1;
+  width: 250px;
+  height: 300px;
+  object-fit: cover;
+  object-position: center;
+  border-radius: 6px;
+  
+}
+
+.visão-pessoal h2 {
+  color: #c6a664;
+  font-family: 'Cinzel', serif;
+  margin-bottom: 15px;
+}
+
+.visão-pessoal p {
+  color: #bdbdbd;
+}
+
+
+/* CTA FINAL */
+ .cta-final {
+  background-color: #0c0c0c;
+  padding: 80px 20px;
+  text-align: center;
+}
+
+.cta-final .cta-box {
+  display: inline-block;
+  background-color: #1a1a1a;
+  padding: 40px 50px;
+  border-radius: 8px;
+  border: 1px solid #c6a664;
+}
+
+.cta-final p {
+  font-family: 'Cinzel', serif;
+  font-size: 22px;
+  color: #c6a664;
+  margin-bottom: 20px;
+}
+
+.cta-final a {
+  background-color: #c6a664;
+  color: #0c0c0c;
+  padding: 12px 30px;
+  border-radius: 4px;
+  text-decoration: none;
+  transition: 0.3s ease;
+}
+
+.cta-final a:hover {
+  background-color: #e4cf8b;
+  transform: scale(1.08);
+}
+
+/* FOOTER */
+
+.footer {
+    background-color: #0c0c0c;
+    color: #c6a664;
+    padding: 40px 60px 20px;
+    font-family: "Cinzel", serif;
+  }
+
+  .footer-container {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    border-top: 2px solid #f5f5f5;
+    padding-top: 30px;
+  }
+
+  .footer-section {
+    flex: 1;
+    min-width: 220px;
+    margin-bottom: 20px;
+  }
+
+
+
+  .footer-section h3 {
+    font-size: 18px;
+    margin-bottom: 20px;
+  }
+
+.membros {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .membro {
+    text-align: start;
+    align-items: flex-start;
+  }
+
+  .membro img {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #f5f5f5;
+    margin-bottom: 5px;
+  }
+
+  .membro p {
+    font-size: 13px;
+    line-height: 1.2;
+  }
+
+  .sitemap ul {
+    list-style: none;
+    padding: 0;
+  }
+
+  .sitemap ul li {
+    margin-bottom: 10px;
+  }
+
+  .sitemap a {
+    color: #f5f5f5;
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .sitemap a:hover {
+    color: #c6a664;
+  }
+
+  .contato p {
+    margin: 5px 0;
+  }
+
+  .social-icons {
+    margin-top: 10px;
+  }
+
+  .social-icons a img {
+    width: 44px;
+    margin-right: 10px;
+    transition: 0.2s;
+  }
+
+  .social-icons a img:hover {
+    transform: scale(1.1);
+  }
+
+  .copyright {
+    text-align: right;
+    border-top: 1px solid #f5f5f5;
+    padding-top: 10px;
+    font-size: 13px;
+    color: #ccc;
+  }
+
