@@ -34,16 +34,16 @@
 
       <form class="formulario">
         <label>Nome do usuário</label>
-        <input id="ipt_nome" type="text" placeholder="Ex: David Beckham">
+        <input id="ipt_nome" type="text" placeholder="Ex: David Beckham" value="teste">
 
         <label>E-mail</label>
-        <input id="ipt_email" type="email" placeholder="Ex: davidbeckham@gmail.com">
+        <input id="ipt_email" type="email" placeholder="Ex: davidbeckham@gmail.com" value="teste@email.com">
 
         <label>Senha</label>
-        <input id="ipt_senha" type="password" placeholder="Insira sua senha">
+        <input id="ipt_senha" type="password" placeholder="Insira sua senha" value="ABC123abc!">
 
         <label>Confirmar senha</label>
-        <input id="ipt_confirmar" type="password" placeholder="Redigite sua senha">
+        <input id="ipt_confirmar" type="password" placeholder="Redigite sua senha"value="ABC123abc!">
 
           <p id="responseValidator" class="mensagem"></p>
 
@@ -131,7 +131,7 @@
               responseValidator.style.color = "red";
               responseValidator.innerHTML = resposta?.msg || "Erro ao cadastrar";
               return;
-          }
+          } 
 
           // SUCESSO
           responseValidator.style.color = "lightgreen";
