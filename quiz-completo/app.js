@@ -28,8 +28,9 @@ app.use(
     idUsuario: null,
     idQuizSelecionado: null,
     idPergunta: null
-  })
+  })                                             
 );
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, "public")));

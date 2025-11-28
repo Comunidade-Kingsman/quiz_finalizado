@@ -123,6 +123,8 @@
               senha: senha
           })
       })
+
+
       .then(async function(response) {
           var resposta = await response.json().catch(() => null);
 
@@ -136,6 +138,9 @@
           // SUCESSO
           responseValidator.style.color = "lightgreen";
           responseValidator.innerHTML = resposta.msg;
+            setTimeout(() => {
+                    window.location.href = "/website/login/login.html";
+          }, "2000");   //ADICIONEI O WINDOW LOCATION
       })
       .catch(function (erro) {
           console.error("Erro no fetch:", erro);

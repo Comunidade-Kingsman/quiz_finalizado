@@ -137,6 +137,21 @@ JOIN quiz q ON uq.fk_quiz = q.id_quiz
 WHERE u.id_usuario = 1
 GROUP BY u.nome, q.nome;
 
+select * from usuario;
+
+/*
+limpar as tabelas;
+SET FOREIGN_KEY_CHECKS = 0;
+TRUNCATE TABLE resposta_usuario;
+TRUNCATE TABLE usuario_quiz;
+TRUNCATE TABLE usuario;
+TRUNCATE TABLE alternativas;
+TRUNCATE TABLE pergunta;
+TRUNCATE TABLE quiz;
+SET FOREIGN_KEY_CHECKS = 1; 
+*/
+
+
 
 
 

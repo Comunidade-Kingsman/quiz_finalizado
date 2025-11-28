@@ -44,8 +44,17 @@ function registrarResposta(req, res) {
 
             return respostaModel.registrarResposta(idUsuarioQuiz, idPergunta, idResposta);
         })
-        .then(() => {
-            res.status(200).json({ mensagem: "Resposta registrada com sucesso!" });
+            .then(() => {
+            // 2. VERIFICA se o quiz terminou, listando perguntas restantes
+            return perguntaModel.listarPerguntasNaoRespondidas(idUsuario, idQuiz);
+        })
+            .then((perguntasRestantes) => {
+            // 3. DECIDE o status e envia para o front-end
+            if (perguntasRestantes.length === 0) {
+                res.status(200).json({ statusQuiz: "FINALIZADO", mensagem: "Última resposta registrada!" });
+            } else {
+                res.status(200).json({ statusQuiz: "CONTINUAR", mensagem: "Resposta registrada com sucesso!" });
+            }
         })
         .catch((erro) => {
             if (erro === "USUARIO_QUIZ_NAO_ENCONTRADO") {

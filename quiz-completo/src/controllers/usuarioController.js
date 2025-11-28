@@ -27,14 +27,12 @@ function autenticar(req, res) {
     usuarioModel.autenticar(email, senha)
     .then(
         function (resultadoAutenticar) {
-            console.log(`\nResultados encontrados: ${resultadoAutenticar.length}`);
-            console.log(`Resultados: ${JSON.stringify(resultadoAutenticar)}`); // transforma JSON em String
-
+            
             if (resultadoAutenticar.length == 1) {
                 console.log(resultadoAutenticar);
-
+                
                 req.session.idUsuario = resultadoAutenticar[0].id_usuario;
-
+                
                 res.status(200).json({
                     msg: "Login realizado com sucesso."
                 });
@@ -52,12 +50,12 @@ function autenticar(req, res) {
             res.status(500).json(erro.sqlMessage);
         }
     );
-
+    
 }
 
 function sair(req, res) {
     req.session.destroy((error) => {
-		if (error) res.status(500).json(error);
+        if (error) res.status(500).json(error);
 		res.status(200).json({ msg: "Usuário deslogado com sucesso." });
         return;
 	});
@@ -67,7 +65,7 @@ function cadastrarUsuario(req, res) {
     var nome = req.body.nome;
     var email = req.body.email;
     var senha = req.body.senha;
-
+    
     if (!nome) {
         res.status(400).send("nome não informado!");
         return;
@@ -80,7 +78,7 @@ function cadastrarUsuario(req, res) {
         res.status(400).send("senha não informada!");
         return;
     }
-
+    
     usuarioModel.buscarUsuarioPorEmail(email).then((dados) => {
         emailJaCadastrado = dados.length > 0;
         if (emailJaCadastrado) {
@@ -89,7 +87,7 @@ function cadastrarUsuario(req, res) {
             });
             return;
         }
-
+        
         usuarioModel.cadastrarUsuario(
             nome,
             email,
@@ -103,8 +101,8 @@ function cadastrarUsuario(req, res) {
         }).catch((erro) => {
             console.log(erro);
             console.log(
-            "\nHouve um erro ao realizar o cadastro! Erro: ",
-            erro.sqlMessage
+                "\nHouve um erro ao realizar o cadastro! Erro: ",
+                erro.sqlMessage
             );
             res.status(500).json(erro.sqlMessage);
             return;

@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>Testes de Conhecimentos</title>
     <style>
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Open+Sans:wght@300;400;500&display=swap');
 
         /* Impede que header passe do tamanho da página */
         * {
@@ -17,8 +18,8 @@
             opacity: 0;
             pointer-events: none;
             transition: opacity .15s ease-in-out;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: #f0f2f5;
+            background: url('../../image-assets/quizesfundo.png');
+            background-position: center;
             color: #333;
         }
 
@@ -30,7 +31,7 @@
         /* HEADER */
         header {
             width: 100%;
-            background: #1e40af;
+            background: #1a1a1a;
             color: white;
             padding: 14px 25px;
             display: flex;
@@ -40,6 +41,8 @@
         }
 
         header h2 {
+            font-family: 'Cinzel', serif;
+            color: #c6a664;
             margin: 0;
             font-weight: 600;
         }
@@ -61,11 +64,13 @@
         }
 
         h1 {
-            text-align: center;
+            text-align: start;
+            margin-left: 240px;
             margin-top: 30px;
             font-size: 32px;
             font-weight: 700;
-            color: #222;
+            color: #c6a664;
+            text-shadow: 2px 2px 8px #000;
         }
 
         .quiz-container {
@@ -77,13 +82,13 @@
         }
 
         .quiz-card {
-            background: white;
+            background: #0c0c0c;
             padding: 20px;
             border-radius: 12px;
             box-shadow: 0 3px 8px rgba(0,0,0,0.08);
             cursor: pointer;
             transition: 0.25s;
-            border-left: 6px solid #4A90E2;
+            border-left: 6px solid #c6a664;
         }
 
         .quiz-card:hover {
@@ -92,8 +97,10 @@
         }
 
         .quiz-title {
+            font-family: 'Cinzel', serif;
             font-size: 20px;
             font-weight: bold;
+            color: #c6a664;
             margin-bottom: 8px;
             display: flex;
             align-items: center;
@@ -101,8 +108,9 @@
         }
 
         .quiz-desc {
+            font-family: 'Open Sans', sans-serif;
             font-size: 14px;
-            color: #555;
+            color: #ffffff;
         }
 
         .icon {
@@ -186,7 +194,7 @@
 
                 card.innerHTML = `
                     <div class="quiz-title">
-                        <span class="icon">📘</span> 
+                        <span class="icon"></span> 
                         ${q.nome}
                     </div>
                     <div class="quiz-desc">${q.descricao}</div>

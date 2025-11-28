@@ -214,13 +214,21 @@
     document.getElementById("mensagem").innerText = "";
 
     try {
-      await fetch("/resposta", {
+      const response = await fetch("/resposta", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ idResposta: alternativaSelecionada })
       });
 
-      carregarPergunta();
+      const data = await response.json();
+
+            if (data.statusQuiz === "FINALIZADO") {
+          // Se o quiz terminou, redirecionamos imediatamente para os resultados.
+          verResultados(); 
+      } else {
+          // Se ainda houver perguntas, carregamos a próxima normalmente.
+          carregarPergunta();
+      }
     } catch (err) {
       console.error(err);
       alert("Erro ao enviar resposta.");
