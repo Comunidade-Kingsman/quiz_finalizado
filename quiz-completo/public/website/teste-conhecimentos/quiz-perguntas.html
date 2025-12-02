@@ -7,6 +7,8 @@
   <link rel="stylesheet" href="quiz.css">
 
   <style>
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Open+Sans:wght@300;400;500&display=swap');
+
     * {
       margin: 0;
       padding: 0;
@@ -16,8 +18,8 @@
     html, body {
       width: 100%;
       overflow-x: hidden; /* evita scroll horizontal */
-      font-family: "Open Sans", sans-serif;
-      background: #f4f4f4;
+      font-family: 'Open Sans', sans-serif;
+      background: #0c0c0c;
       transition: opacity .15s ease-in-out;
     }
 
@@ -34,12 +36,13 @@
     /* HEADER FIXO */
     header {
       width: 100vw; /* garante 100% da viewport */
-      background: #1e40af;
+      background: #1a1a1a;
       color: white;
       padding: 14px 25px;
       display: flex;
       justify-content: space-between;
       align-items: center;
+      border-bottom: 1px solid #c6a664;
       box-shadow: 0 2px 6px rgba(0,0,0,0.15);
       position: sticky; /* fica no topo ao rolar */
       top: 0;
@@ -48,10 +51,17 @@
       box-sizing: border-box; /* inclui padding na largura */
     }
 
+        header h2 {
+            font-family: 'Cinzel', serif;
+            color: #c6a664;
+            margin: 0;
+            font-weight: 600;
+        }
+
 
     /* BOTÃO DE LOGOUT */
     .btn-logout {
-      background: #b91c1c;
+      background: #991b1b;
       border: none;
       padding: 8px 14px;
       color: white;
@@ -70,22 +80,25 @@
     .container {
       max-width: 700px;
       margin: 40px auto;
-      background: white;
+      background: #1a1a1a;
       padding: 30px;
       border-radius: 12px;
-      box-shadow: 0 0 20px rgba(0,0,0,0.1);
+      box-shadow: 0 0 20px rgba(0,0,0,0.23);
     }
 
 
     h2 {
       margin-bottom: 20px;
+      font-family: 'Cinzel', serif;
+      color: #c6a664;
       font-size: 26px;
       font-weight: 600;
     }
 
     .alternativa {
       padding: 12px 16px;
-      background: #eeeeee;
+      background: #262626;
+      color: #f5f5f5;
       border-radius: 8px;
       margin-bottom: 12px;
       cursor: pointer;
@@ -93,18 +106,18 @@
     }
 
     .alternativa:hover {
-      background: #dcdcdc;
+      background: #333333;
     }
 
     .alternativa.selected {
-      background: #c3e7ff;
-      border-left: 5px solid #2196f3;
+      background: #332d20;
+      border-left: 5px solid #c6a664;
     }
 
     #btnProxima {
       margin-top: 20px;
       padding: 14px;
-      background: #1d3557;
+      background: #184e77;
       color: white;
       border: none;
       border-radius: 8px;
@@ -115,7 +128,7 @@
     }
 
     #btnProxima:hover {
-      background: #457b9d;
+      background: #386fa4;
     }
 
     #mensagem {
@@ -127,7 +140,7 @@
     #btnResultados {
       margin-top: 25px;
       padding: 14px;
-      background: #06a77d;
+      background: #047857;
       color: white;
       border: none;
       border-radius: 8px;
@@ -139,7 +152,7 @@
     }
 
     #btnResultados:hover {
-      background: #08c993;
+      background: #069d6e;
     }
   </style>
 </head>
@@ -222,13 +235,9 @@
 
       const data = await response.json();
 
-            if (data.statusQuiz === "FINALIZADO") {
-          // Se o quiz terminou, redirecionamos imediatamente para os resultados.
-          verResultados(); 
-      } else {
-          // Se ainda houver perguntas, carregamos a próxima normalmente.
-          carregarPergunta();
-      }
+      carregarPergunta();
+      
+ 
     } catch (err) {
       console.error(err);
       alert("Erro ao enviar resposta.");

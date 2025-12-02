@@ -18,9 +18,9 @@
             opacity: 0;
             pointer-events: none;
             transition: opacity .15s ease-in-out;
-            background: url('../../image-assets/quizesfundo.png');
-            background-position: center;
-            color: #333;
+            background: #0c0c0c;
+            color: #f5f5f5;
+            font-family: 'Open Sans', sans-serif;
         }
 
         body.loaded {
@@ -29,16 +29,22 @@
         }
 
         /* HEADER */
-        header {
-            width: 100%;
-            background: #1a1a1a;
-            color: white;
-            padding: 14px 25px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.15);
-        }
+    header {
+      width: 100vw; /* garante 100% da viewport */
+      background: #1a1a1a;
+      color: white;
+      padding: 14px 25px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #c6a664;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+      position: sticky; /* fica no topo ao rolar */
+      top: 0;
+      left: 0;
+      z-index: 1000;
+      box-sizing: border-box; /* inclui padding na largura */
+    }
 
         header h2 {
             font-family: 'Cinzel', serif;
@@ -48,7 +54,7 @@
         }
 
         .btn-logout {
-            background: #b91c1c;
+            background: #991b1b;
             border: none;
             padding: 8px 14px;
             color: white;
@@ -70,7 +76,7 @@
             font-size: 32px;
             font-weight: 700;
             color: #c6a664;
-            text-shadow: 2px 2px 8px #000;
+            text-shadow: none;
         }
 
         .quiz-container {
@@ -82,10 +88,10 @@
         }
 
         .quiz-card {
-            background: #0c0c0c;
+            background: #1a1a1a;
             padding: 20px;
             border-radius: 12px;
-            box-shadow: 0 3px 8px rgba(0,0,0,0.08);
+            box-shadow: 0 3px 8px rgba(0,0,0,0.2);
             cursor: pointer;
             transition: 0.25s;
             border-left: 6px solid #c6a664;
@@ -93,7 +99,8 @@
 
         .quiz-card:hover {
             transform: translateY(-4px);
-            box-shadow: 0 6px 14px rgba(0,0,0,0.12);
+            background: #262626;
+            box-shadow: 0 6px 14px rgba(0,0,0,0.3);
         }
 
         .quiz-title {
@@ -110,7 +117,7 @@
         .quiz-desc {
             font-family: 'Open Sans', sans-serif;
             font-size: 14px;
-            color: #ffffff;
+            color: #bdbdbd;
         }
 
         .icon {
