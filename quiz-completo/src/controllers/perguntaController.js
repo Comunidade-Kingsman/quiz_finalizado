@@ -22,7 +22,7 @@ function pegaPerguntaDoQuiz(req, res) {
                 return;
             }
 
-            // Agrupar a primeira pergunta não respondida
+            // Agrupa a primeira pergunta não respondida
             var primeiraPerguntaId = linhas[0].id_pergunta;
 
             // Filtra todas as linhas dessa pergunta

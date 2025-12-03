@@ -88,7 +88,7 @@ function validate_login(){
       var senha = ipt_senha.value;
 
       fetch("/usuario", {
-          method: "PUT",
+          method: "PUT", //put não permite que duas sessões sejam criadas ao mesmo tempo no servidor
           headers: {
               "Content-Type": "application/json"
           },

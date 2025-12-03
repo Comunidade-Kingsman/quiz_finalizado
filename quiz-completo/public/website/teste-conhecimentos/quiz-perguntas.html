@@ -1,3 +1,5 @@
+<!-- // ADICIONEI COMENTÁRIOS NESSE ARQUIVO PARA ESTUDO POSTERIOR -->
+
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -35,7 +37,7 @@
 
     /* HEADER FIXO */
     header {
-      width: 100vw; /* garante 100% da viewport */
+      width: 100vw; 
       background: #1a1a1a;
       color: white;
       padding: 14px 25px;
@@ -43,12 +45,12 @@
       justify-content: space-between;
       align-items: center;
       border-bottom: 1px solid #c6a664;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.15); /* Horizontal - Vertical - Raio - cor,opacidade
       position: sticky; /* fica no topo ao rolar */
       top: 0;
       left: 0;
       z-index: 1000;
-      box-sizing: border-box; /* inclui padding na largura */
+      box-sizing: border-box; 
     }
 
         header h2 {
@@ -179,47 +181,45 @@
 <script>
   let alternativaSelecionada = null;
 
-  // ============================
   // 1) VALIDAR SESSÃO
-  // ============================
-  async function validarSessao() {
+  async function validarSessao() { //verifica se usuário está logado
     try {
       const res = await fetch("/usuario/sessao");
       if (res.status === 401) {
         window.location.href = "/website/login/login.html";
         return;
       }
-      document.body.classList.add("loaded"); // mostra a página
+      document.body.classList.add("loaded"); // mostra a página caso esteja 
       carregarPergunta();
     } catch (err) {
       console.error("Erro ao validar sessão:", err);
       window.location.href = "/website/login/login.html";
     }
   }
-
+  //executa imediatamente
   validarSessao();
 
-  // ============================
   // 2) BOTÃO DE LOGOUT
-  // ============================
   document.getElementById("logoutBtn").onclick = async () => {
     try { await fetch("/usuario", { method: "DELETE" }); } catch(e) {}
     window.location.href = "/index.html";
   };
 
-  // ============================
+  
   // 3) FUNÇÕES DO QUIZ
-  // ============================
   function selecionarAlternativa(div) {
-    document.querySelectorAll(".alternativa").forEach(a => a.classList.remove("selected"));
-    div.classList.add("selected");
+    document.querySelectorAll(".alternativa").forEach(a => a.classList.remove("selected")); //quando seleciona uma alternativa, remove a classe .selected de todas outras
+
+    //querySelectorAll localiza todos elementos da pagina que correspondem a um seletor CSS específico (melhor para manipular grupo)
+
+    div.classList.add("selected");  //adiciona classe na selecionada
     alternativaSelecionada = div.dataset.id;
   }
 
   async function proximaPergunta() {
     if (!alternativaSelecionada) {
       const msg = document.getElementById("mensagem");
-      msg.innerText = "Selecione uma alternativa!";
+      msg.innerText = "Selecione uma alternativa!"; //garante que o usuário selecione alternativa
       msg.style.color = "red";
       return;
     }
@@ -231,9 +231,9 @@
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ idResposta: alternativaSelecionada })
-      });
+      }); //faz requisição ao backend sobre a alternativa selecionada -> controller chama o model, que pega do banco de dados o id 
 
-      const data = await response.json();
+      const data = await response.json(); //guarda a resposta em uma variável
 
       carregarPergunta();
       
@@ -248,11 +248,11 @@
     window.location.href = "/website/teste-conhecimentos/quiz-resultados.html";
   }
 
-  function carregarPergunta() {
+  function carregarPergunta() { //atualiza a tela
     fetch("/pergunta")
       .then(res => res.json())
       .then(data => {
-        if (!data || !data.id_pergunta) {
+        if (!data || !data.id_pergunta) { //verifica se ainda tem pergunta sobrando
           document.getElementById("textoPergunta").innerText = "Quiz finalizado!";
           document.getElementById("listaAlternativas").innerHTML = "";
           document.getElementById("btnProxima").style.display = "none";
@@ -260,13 +260,13 @@
           return;
         }
 
-        document.getElementById("textoPergunta").innerText = data.pergunta;
+        document.getElementById("textoPergunta").innerText = data.pergunta; //atualiza o texto da pergunta
 
-        const lista = document.getElementById("listaAlternativas");
-        lista.innerHTML = "";
+        const lista = document.getElementById("listaAlternativas"); //armazena nova lista de perguntas
+        lista.innerHTML = ""; //limpa lista de perguntas
         alternativaSelecionada = null;
 
-        data.alternativas.forEach(alt => {
+        data.alternativas.forEach(alt => { //cria um elemento pra cada alternativa 
           const div = document.createElement("div");
           div.classList.add("alternativa");
           div.innerText = alt.alternativa;

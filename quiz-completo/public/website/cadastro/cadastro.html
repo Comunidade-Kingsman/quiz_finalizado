@@ -1,3 +1,4 @@
+<!-- // ADICIONEI COMENTÁRIOS NESSE ARQUIVO PARA ESTUDO POSTERIOR -->
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -34,16 +35,16 @@
 
       <form class="formulario">
         <label>Nome do usuário</label>
-        <input id="ipt_nome" type="text" placeholder="Ex: David Beckham" value="teste">
+        <input id="ipt_nome" type="text" placeholder="Ex: David Beckham" >
 
         <label>E-mail</label>
-        <input id="ipt_email" type="email" placeholder="Ex: davidbeckham@gmail.com" value="teste@email.com">
+        <input id="ipt_email" type="email" placeholder="Ex: davidbeckham@gmail.com" >
 
         <label>Senha</label>
-        <input id="ipt_senha" type="password" placeholder="Insira sua senha" value="ABC123abc!">
+        <input id="ipt_senha" type="password" placeholder="Insira sua senha" >
 
         <label>Confirmar senha</label>
-        <input id="ipt_confirmar" type="password" placeholder="Redigite sua senha"value="ABC123abc!">
+        <input id="ipt_confirmar" type="password" placeholder="Redigite sua senha">
 
           <p id="responseValidator" class="mensagem"></p>
 
@@ -106,7 +107,7 @@
 
   // ENVIA PARA A ROTA /usuario
   function cadastrar() {
-      if (!isValid) return;
+      if (!isValid) return; //segunda verificação
 
       var nome = ipt_nome.value.trim();
       var email = ipt_email.value.trim();
@@ -125,14 +126,18 @@
       })
 
 
-      .then(async function(response) {
-          var resposta = await response.json().catch(() => null);
+      .then(async function(response) { //é a função que lida com a resposta do fetch anterior 
+          var resposta = await response.json().catch(() => null); //await pausa até que receba o json e guarda na variável o email, senha e nome
 
           if (!response.ok) {
-              // ERROS PERSONALIZADOS DO SERVIDOR
+              // ERROS
               responseValidator.style.color = "red";
               responseValidator.innerHTML = resposta?.msg || "Erro ao cadastrar";
               return;
+              // optional chaining serve pra verificar se .msg existe antes de acessar
+              // resposta é objeto, .msg é parte dele que foi definida nos controllers, e é a parte que queremos
+              // tenta primeiro mostrar uma mensagem detalhada do erro, se não tiver (erro 500 por exemplo), exibe a mensagem genérica 
+            
           } 
 
           // SUCESSO
@@ -140,7 +145,7 @@
           responseValidator.innerHTML = resposta.msg;
             setTimeout(() => {
                     window.location.href = "/website/login/login.html";
-          }, "2000");   //ADICIONEI O WINDOW LOCATION
+          }, "2000");   
       })
       .catch(function (erro) {
           console.error("Erro no fetch:", erro);

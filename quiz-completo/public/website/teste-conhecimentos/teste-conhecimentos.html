@@ -1,3 +1,5 @@
+<!-- // ADICIONEI COMENTÁRIOS NESSE ARQUIVO PARA ESTUDO POSTERIOR -->
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -30,7 +32,7 @@
 
         /* HEADER */
     header {
-      width: 100vw; /* garante 100% da viewport */
+      width: 100vw; 
       background: #1a1a1a;
       color: white;
       padding: 14px 25px;
@@ -39,11 +41,11 @@
       align-items: center;
       border-bottom: 1px solid #c6a664;
       box-shadow: 0 2px 6px rgba(0,0,0,0.15);
-      position: sticky; /* fica no topo ao rolar */
+      position: sticky; 
       top: 0;
       left: 0;
       z-index: 1000;
-      box-sizing: border-box; /* inclui padding na largura */
+      box-sizing: border-box; 
     }
 
         header h2 {
@@ -83,7 +85,7 @@
             max-width: 900px;
             margin: 30px auto;
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); /*autofit para responsividade */
             gap: 20px;
         }
 
@@ -141,23 +143,22 @@
 
     <script>
 
-    // =========================================
-    // 1) Checar sessão (GET /usuario/sessao)
-    // =========================================
+    // 1) Checar sessão (utiliza GET no endpoint /usuario/sessao)
+
     async function checarSessao() {
         try {
             const res = await fetch("/usuario/sessao");
             
-            if (res.status === 401) {
+            if (res.status === 401) { //401 é não autorizado
                 // Redireciona ANTES de mostrar qualquer coisa
                 window.location.href = "/website/login/login.html";
                 return;
             }
 
-            // Sessão válida → revela a página
+            // se a sessão for válida,  revela a página
             document.body.classList.add("loaded");
 
-        } catch (err) {
+        } catch (err) { // javascript fornece o objeto err automaticamente
             console.error("Erro na checagem de sessão:", err);
             window.location.href = "/website/login/login.html";
         }
@@ -167,27 +168,22 @@
     checarSessao();
 
 
+    // 2) Logout (método DELETE no endpoint /usuario)
 
-    // =========================================
-    // 2) Logout (DELETE /usuario)
-    // =========================================
-    document.getElementById("logoutBtn").onclick = async () => {
+    document.getElementById("logoutBtn").onclick = async () => { //define o que ocorre ao clicar no botão
         try {
-            await fetch("/usuario", { method: "DELETE" });
+            await fetch("/usuario", { method: "DELETE" }); //requisita um delete no backend, encerrando a sessão
             window.location.href = "/index.html";
         } catch (err) {
             window.location.href = "/index.html";
         }
     };
 
-
-    // =========================================
     // 3) Carregar lista de quizzes
-    // =========================================
-    fetch('/quiz')
-        .then(res => res.json())
-        .then(quizzes => {
-            const container = document.getElementById('quizList');
+    fetch('/quiz') //GET no endpoint /quiz
+        .then(res => res.json()) //converte a resposta em JSON para objeto JS
+        .then(quizzes => { //quizzes é um array de objetos que veio do backend (model)
+            const container = document.getElementById('quizList'); // guarda a lista de quiz que será exibida
             container.innerHTML = '';
 
             if (!Array.isArray(quizzes) || quizzes.length === 0) {
@@ -195,7 +191,7 @@
                 return;
             }
 
-            quizzes.forEach(q => {
+            quizzes.forEach(q => { //pra cada quiz cria um card (div) com nome e descrição que vieram do banco de dados
                 const card = document.createElement('div');
                 card.className = 'quiz-card';
 
@@ -207,13 +203,13 @@
                     <div class="quiz-desc">${q.descricao}</div>
                 `;
 
-                card.onclick = async () => {
+                card.onclick = async () => {//tonar o cartão clicável
                     try {
-                        const res = await fetch(`/quiz/selecionar/${q.id_quiz}`);
-
+                        const res = await fetch(`/quiz/selecionar/${q.id_quiz}`); 
+                        //backend recebe a requisição -> função iniciarQuiz (no controller) é iniciada -> função salva o id do quiz na sessão do servidor
                         if (!res.ok) {
                             const erro = await res.json();
-                            alert("Erro: " + erro.msg);
+                            alert("Erro: " + erro.msg); //falha do fetch
                             return;
                         }
 
@@ -221,16 +217,16 @@
 
                         window.location.href = `/website/teste-conhecimentos/quiz-perguntas.html`;
 
-                    } catch (e) {
+                    } catch (e) { //falha inesperada, o usuario recebe a msg de erro
                         console.error(e);
                         alert("Erro ao selecionar quiz.");
                     }
                 };
 
-                container.appendChild(card);
+                container.appendChild(card); //pega o card que está guardado e transforma em elemento visual "filho" do container
             });
         })
-        .catch(err => {
+        .catch(err => { //não consegue acessar a lista de quizzes
             console.error(err);
             document.getElementById('quizList').innerHTML =
                 "<p>Erro ao carregar quizzes.</p>";

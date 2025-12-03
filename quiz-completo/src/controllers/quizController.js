@@ -49,7 +49,7 @@ function iniciarQuiz(req, res) {
                 return Promise.reject("JA_EXISTE");
             }
 
-            // Insere o registro
+            // Chama a model para inserir o registro no banco 
             return quizModel.iniciarQuiz(idUsuario, idQuiz);
         })
         .then(() => {

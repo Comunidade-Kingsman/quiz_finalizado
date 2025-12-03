@@ -1,3 +1,5 @@
+<!-- // ADICIONEI COMENTÁRIOS NESSE ARQUIVO PARA ESTUDO POSTERIOR -->
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -22,13 +24,12 @@
         opacity: 0;
         pointer-events: none;
         transition: opacity .15s ease-in-out;
-
         font-family: 'Open Sans', sans-serif;
         max-width: 900px;
         margin: 40px auto;
         padding: 20px;
-        background: #0c0c0c; /* Fundo Principal Escuro */
-        color: #f5f5f5; /* Texto principal claro */
+        background: #0c0c0c; 
+        color: #f5f5f5; 
     }
 
     body.loaded {
@@ -39,7 +40,7 @@
     /* HEADER */
     header {
         width: 100%;
-        background: #1a1a1a; /* Fundo Secundário */
+        background: #1a1a1a; 
         color: white;
         padding: 14px 25px;
         display: flex;
@@ -52,14 +53,14 @@
 
     header h2 {
         font-family: 'Cinzel', serif;
-        color: #c6a664; /* Destaque em Ouro */
+        color: #c6a664; 
         margin: 0;
         font-weight: 600;
     }
 
     /* BOTÃO LOGOUT */
     .btn-logout {
-        background: #991b1b; /* Vermelho sóbrio */
+        background: #991b1b; 
         border: none;
         padding: 8px 14px;
         color: white;
@@ -79,7 +80,7 @@
         text-align: center;
         margin-bottom: 10px;
         margin-top: 25px;
-        color: #c6a664; /* Destaque em Ouro */
+        color: #c6a664; 
         font-size: 32px;
     }
 
@@ -92,7 +93,7 @@
         font-family: 'Cinzel', serif;
     }
 
-    /* CONTAINER PRINCIPAL DOS GRÁFICOS (Grid) */
+    /*  GRÁFICOS (Grid) */
     .results-grid {
         display: flex;
         flex-wrap: wrap; 
@@ -105,8 +106,7 @@
         /* Largura ajustada para caber lado a lado */
         width: 100%;
         max-width: 400px; 
-        
-        background: #1a1a1a; /* Fundo Secundário */
+        background: #1a1a1a; 
         padding: 25px;
         border-radius: 12px;
         box-shadow: 0 0 15px rgba(0,0,0,0.4);
@@ -119,7 +119,7 @@
         font-family: 'Open Sans', sans-serif;
     }
 
-    /* CAIXA DE MENSAGEM DE DESEMPENHO */
+    /* MENSAGEM DE DESEMPENHO */
     #mensagem {
         font-size: 20px;
         font-weight: bold;
@@ -156,7 +156,7 @@
         text-decoration: none;
         text-align: center;
         padding: 14px 25px;
-        background: #c6a664; /* Ouro/Âmbar como ação principal */
+        background: #c6a664; 
         color: #1a1a1a;
         font-size: 18px;
         border-radius: 10px;
@@ -169,7 +169,7 @@
         background: #dfc884;
     }
     
-    /* Media Query para telas menores */
+    /* Media Query para telas menores, ajusta o tamanho dos gráficos (aprendi e quiz implementar) */
     @media (max-width: 600px) {
         .chart-container {
             max-width: 100%;
@@ -208,9 +208,7 @@
 
 <script>
 
-    // ============================
     // 1) VALIDAR SESSÃO
-    // ============================
     async function validarSessao() {
         try {
             const res = await fetch("/usuario/sessao");
@@ -231,9 +229,7 @@
     validarSessao();
 
 
-    // ============================
     // 2) BOTÃO DE LOGOUT
-    // ============================
     document.getElementById("logoutBtn").onclick = async () => {
         try {
             await fetch("/usuario", { method: "DELETE" });
@@ -243,10 +239,15 @@
     };
 
 
-    // ============================
     // 3) CARREGAR RESULTADOS
-    // ============================
     document.addEventListener("DOMContentLoaded", async () => {
+        // async necessário por conta do await
+        //document é a página HTML
+        //addEventListener espera um evento específico ocorrer
+        //"DOMContentLoaded" é o evento, significa que a página carregou
+        // precisa da página carregada pois usa o CANVAS pra desenhar os gráficos
+
+        
         try {
             const response = await fetch("/resposta/resultado");
             const data = await response.json();
@@ -260,10 +261,10 @@
             } = data;
 
             const msg = document.getElementById("mensagem");
-            msg.textContent = mensagemDesempenho;
+            msg.textContent = mensagemDesempenho; //está definido nos Controllers 
 
             if (percentualAcertos >= 80) {
-                msg.classList.add("excelente");
+                msg.classList.add("excelente"); // aplica o estilo CSS na mensagem que virá do backend
             } else if (percentualAcertos >= 50) {
                 msg.classList.add("mediano");
             } else {
@@ -271,12 +272,12 @@
             }
 
             // cores
-            const corAcertos = "#184e77"; /* Azul marinho (padronizado com btnProxima) */
+            const corAcertos = "#184e77"; 
             const corErros = "#b91c1c";
             
             // cores para o gráfico
-            const corChartAcertos = "#c6a664"; /* Ouro para o gráfico */
-            const corChartErros = "#991b1b"; /* Vermelho escuro para o gráfico */
+            const corChartAcertos = "#c6a664"; 
+            const corChartErros = "#991b1b"; 
 
             // barras
             new Chart(document.getElementById("barra"), {
@@ -302,19 +303,22 @@
                             align: "top",
                             font: { weight: "bold", size: 15 },
                             formatter: (value, ctx) =>
-                                ctx.chart.data.labels[ctx.dataIndex] === "Acertos"
-                                    ? `${totalAcertos} acertos`
-                                    : `${totalErros} erros`
+
+                                //verifica o "rótulo" dos dados é "Acertos"
+                                ctx.chart.data.labels[ctx.dataIndex] === "Acertos" // CONDIÇÃO
+                                    ? `${totalAcertos} acertos` // SE FOR VERDADEIRO (use este valor)
+                                    : `${totalErros} erros` //SE FOR FALSO (use esse valor)
+                                    //if else de forma compacta usando operador ternário
                         }
                     },
                     scales: {
                         y: { 
                             beginAtZero: true, 
-                            ticks: { color: "#f5f5f5" }, /* Corrigido para texto claro */
-                            grid: { color: 'rgba(245, 245, 245, 0.1)' } /* Linhas leves */
+                            ticks: { color: "#f5f5f5" }, 
+                            grid: { color: 'rgba(245, 245, 245, 0.1)' } 
                         },
                         x: { 
-                            ticks: { color: "#f5f5f5" }, /* Corrigido para texto claro */
+                            ticks: { color: "#f5f5f5" }, 
                             grid: { color: 'rgba(245, 245, 245, 0.1)' }
                         }
                     }
@@ -336,14 +340,16 @@
                     responsive: true,
                     plugins: {
                         datalabels: {
-                            color: "#1a1a1a", /* Corrigido para texto escuro no gráfico claro (ouro) */
+                            color: "#1a1a1a", 
                             font: { weight: "bold", size: 16 },
+                            // v = valor numérico do dado
+                            // formatter simplificado abaixo, function(v) retorna v + '%'
                             formatter: v => v + "%"
                         }
                     },
                     legend: {
                         labels: {
-                            color: '#f5f5f5' /* Corrigido para texto claro na legenda */
+                            color: '#f5f5f5'
                         }
                     }
                 }

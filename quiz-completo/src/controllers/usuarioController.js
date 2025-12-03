@@ -34,9 +34,9 @@ function autenticar(req, res) {
         function (resultadoAutenticar) {
             
             if (resultadoAutenticar.length == 1) {
-                console.log(resultadoAutenticar); //verifica se o banco de dados retornou 1, que significa que bateu no banco de dados (login ok)
+                console.log(resultadoAutenticar); //verifica se o banco de dados retornou 1 (uma linha), que significa que bateu no banco de dados (login ok)
                 
-                req.session.idUsuario = resultadoAutenticar[0].id_usuario;
+                req.session.idUsuario = resultadoAutenticar[0].id_usuario; //índice 0 é o id do usuário
                 
                 res.status(200).json({
                     msg: "Login realizado com sucesso."

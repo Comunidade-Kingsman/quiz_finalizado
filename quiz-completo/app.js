@@ -24,7 +24,7 @@ var respostaRouter = require("./src/routes/resposta");
 
 app.use(
   session({
-    secret: String(process.env.SESSION_SECRET),
+    secret: String(process.env.SESSION_SECRET), //chave de segurança
     idUsuario: null,
     idQuizSelecionado: null,
     idPergunta: null
