@@ -1,0 +1,7 @@
+códigos de status HTTP
+res.status(401): Significa "Não Autorizado" (Unauthorized). Você usa isso quando o usuário não está logado.
+res.status(200): Significa "OK" (Success). A requisição foi bem-sucedida.
+res.status(400): Significa "Requisição Inválida" (Bad Request). O cliente enviou dados incompletos (ex: e-mail ou senha vazios).
+res.status(403): Significa "Proibido" (Forbidden). O usuário está logado, mas não tem permissão para acessar algo, ou as credenciais estão incorretas.
+res.status(409): Significa "Conflito" (Conflict). Você usa isso no cadastro porque o e-mail já existe, gerando um conflito de dados.
+res.status(500): Significa "Erro Interno do Servidor" (Internal Server Error). Algo inesperado aconteceu no seu back-end ou no banco de dados.

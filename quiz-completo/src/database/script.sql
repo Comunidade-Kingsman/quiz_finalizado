@@ -149,7 +149,10 @@ TRUNCATE TABLE alternativas;
 TRUNCATE TABLE pergunta;
 TRUNCATE TABLE quiz;
 SET FOREIGN_KEY_CHECKS = 1; 
+
+depois disso, dar os inserts do populate novamente!!!!
 */
+
 
 
 
